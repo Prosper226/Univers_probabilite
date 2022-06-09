@@ -229,7 +229,13 @@ class Arrangement{
             $tickets = [];
 
             for($i = 0; $i < count($champs); $i++){
-                $know[] = $champs[$i]['pos'] - 1;
+                
+                $pos = $champs[$i]['pos'];
+                if($pos > $type || $pos < 1){
+                    throw new Exception("Cannot resolve position: $pos");
+                }else{
+                    $know[] = $pos - 1;
+                }
             }
             
             for($i = 0; $i < count($univers); $i++){

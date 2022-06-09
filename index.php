@@ -18,9 +18,9 @@ try{
     $champs = [
         // ['horse' => 11, 'pos' => 1],
         // ['horse' => 1, 'pos' => 2], 
-        // ['horse' => 7, 'pos' => 4], 
-        ['horse' => 9, 'pos' => 5],
-        ['horse' => 11, 'pos' => 1],
+        ['horse' => 7, 'pos' => 4], 
+        // ['horse' => 9, 'pos' => 5],
+        ['horse' => 11, 'pos' => 4],
         // ['horse' => 7, 'pos' => 4], 
         
     ];
