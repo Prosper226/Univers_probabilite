@@ -20,7 +20,7 @@ class Arrangement{
                 $UNIVERS = "univers_$k".'k';
                 return $this->$UNIVERS($ensemble, $k);
             }else{
-                throw new Exception("k cannot resolve");
+                throw new Exception("univers margin violation");
             }
         }catch(Exception $e){
             throw new Exception($e->getMessage());
@@ -226,18 +226,27 @@ class Arrangement{
             error_log($cardinal);
             ////////////////////////////////////////
 
-            $tickets = [];
-
+            $tickets    = [];
+            $know       = [];
+            $horses      = [];
             for($i = 0; $i < count($champs); $i++){
-                
                 $pos = $champs[$i]['pos'];
                 if($pos > $type || $pos < 1){
                     throw new Exception("Cannot resolve position: $pos");
                 }else{
-                    $know[] = $pos - 1;
+                    if(in_array($pos - 1, $know)){
+                        throw new Exception("Duplicate key are found: $pos");
+                    }else{
+                        $horse = $champs[$i]['horse'];
+                        if(in_array($horse, $horses)){
+                            throw new Exception("Duplicate horse are found: $horse");
+                        }
+                        $know[]     = $pos - 1;
+                        $horses[]   = $horse;
+                    }
                 }
             }
-            
+
             for($i = 0; $i < count($univers); $i++){
                 $k      = 0;
                 $elt    = $univers[$i];

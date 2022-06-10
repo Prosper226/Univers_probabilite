@@ -4,35 +4,35 @@ require 'Arrangement.php';
 
 try{
     
-
     $Arrangement = new Arrangement();
-
-    $ensemble = [2,3,4,5,6];
-
-    // $n = count($ensemble);
-    // $k = 2;
-
-    // $card = $Arrangement->cardinal($n, $k);
-    // $univ = $Arrangement->univers($ensemble, $k);
+    $ensemble = [2,3,4,5,6,7, 8, 9,10, 11, 12, 13, 14, 15, 16];
 
     $champs = [
-        // ['horse' => 11, 'pos' => 1],
-        // ['horse' => 1, 'pos' => 2], 
-        ['horse' => 7, 'pos' => 4], 
+        ['horse' => 1, 'pos' => 1],
+        // ['horse' => 2, 'pos' => 2], 
+        // ['horse' => 3, 'pos' => 4], 
         // ['horse' => 9, 'pos' => 5],
-        ['horse' => 11, 'pos' => 4],
+        // ['horse' => 11, 'pos' => 4],
         // ['horse' => 7, 'pos' => 4], 
-        
     ];
 
-    $type = 5;
+    $type = 3;
+
     $tikets = $Arrangement->tikets($champs, $ensemble, $type);
 
     // // error_log("Cardinal : ".$card);
     // error_log(print_r(["Univers" => $univ], true));
     error_log(print_r(["Tickets" => $tikets], true));
 
+    // $jeux = [
+    //     "jeu"       =>  "7-12-4-11",
+    //     "price"     =>  200,
+    //     "fees"      =>  50,
+    //     "strikes"   =>  "1"
+    // ];
 
+    // $resultat = json_decode('{"result":"4-12-9-13","order":"478500","desorder":"39500","win2":"11000","win2A":"3500","win2B":"7000","win2C":"12500","npt":["8"],"svn":"-","cvn":"-","tvn":"19500","qvn":"-","bonus":"-","map":"181494500","mapc":"68017000","mapg":"249511500"}');
+    // error_log(print_r(["Result" => $resultat], true));
 
 }catch(Exception $e){
     error_log($e->getMessage());
