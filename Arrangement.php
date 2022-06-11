@@ -214,6 +214,16 @@ class Arrangement{
         return $univers;
     }
 
+    private function defineEnsemble(int $nbHorse, array $excludedHorse): Array {
+        for($i = 1; $i <= $nbHorse; $i++){
+            if(in_array($i,$excludedHorse)) continue;
+            $ensemble[] = $i;
+        }
+        return $ensemble;
+    }
+
+
+
 
     public function tikets($champs, $ensemble, $type){
         try{
@@ -274,6 +284,30 @@ class Arrangement{
         }
     }
 
+    public function jeu(String $jeu, int $nbHorse): Array{
+
+        $table  = explode('-', $jeu);
+        $taille = count($table);
+
+        if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
+
+        $champs   = [];
+        $excludedHorse = [];
+
+        for($i = 0; $i < $taille; $i++){
+            if(strtoupper($table[$i]) == 'X') continue;
+            $champs []          = ['horse' => $table[$i], 'pos' => $i + 1];
+            $excludedHorse []   = $table[$i];
+        }
+
+        return [
+            'type'     => $taille,
+            'champs'   => $champs,
+            'ensemble' => $this->defineEnsemble($nbHorse, $excludedHorse)
+        ];
+
+    }
+    
 
 }
 
