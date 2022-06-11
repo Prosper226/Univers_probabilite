@@ -6,7 +6,7 @@ class Arrangement{
     public function __construct(){}
 
 
-    public function cardinal($n, $k){
+    private function cardinal($n, $k){
         try{
             return $this->Factorial($n) / $this->Factorial($n - $k);
         }catch(Exception $e){
@@ -14,7 +14,7 @@ class Arrangement{
         }
     }
 
-    public function univers($ensemble = array(), $k = 1){
+    private function univers($ensemble = array(), $k = 1){
         try{
             if(in_array($k, [1,2,3,4,5], true)){
                 $UNIVERS = "univers_$k".'k';
@@ -26,8 +26,6 @@ class Arrangement{
             throw new Exception($e->getMessage());
         }
     }
-
-
 
     private function Factorial($n) {
         try{
@@ -224,21 +222,23 @@ class Arrangement{
 
 
 
-
-    public function tikets($champs, $ensemble, $type){
+    public function tickets(Array $jeu): Array {
         try{
+            $champs     = $jeu['champs'];
+            $ensemble   = $jeu['ensemble'];
+            $type       = $jeu['type'];
 
-            $k = $type - count($champs);
-            $univers = $this->univers($ensemble, $k);
+            $k          = $type - count($champs);
+            $univers    = $this->univers($ensemble, $k);
             
-            ////////////////////////////////////////
-            $cardinal = $this->cardinal(count($ensemble), $k);
-            error_log($cardinal);
-            ////////////////////////////////////////
+            // //////////////////////////////////////
+            // $cardinal   = $this->cardinal(count($ensemble), $k);
+            // error_log($cardinal);
+            // //////////////////////////////////////
 
             $tickets    = [];
             $know       = [];
-            $horses      = [];
+            $horses     = [];
             for($i = 0; $i < count($champs); $i++){
                 $pos = $champs[$i]['pos'];
                 if($pos > $type || $pos < 1){
@@ -274,7 +274,7 @@ class Arrangement{
                 }
                 
                 $tickets[]  = $ticket;
-                // break; // to unbreak the loop
+        
             }
 
             return $tickets;
@@ -285,31 +285,44 @@ class Arrangement{
     }
 
     public function jeu(String $jeu, int $nbHorse): Array{
+        try{
+            $table  = explode('-', $jeu);
+            $taille = count($table);
 
-        $table  = explode('-', $jeu);
-        $taille = count($table);
+            if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
 
-        if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
+            $champs   = [];
+            $excludedHorse = [];
 
-        $champs   = [];
-        $excludedHorse = [];
+            for($i = 0; $i < $taille; $i++){
+                if(strtoupper($table[$i]) == 'X') continue;
+                $horse = intval($table[$i]);
+                if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $table[$i]");
+                $champs []          = ['horse' => $horse, 'pos' => $i + 1];
+                $excludedHorse []   = $horse;
+            }
 
-        for($i = 0; $i < $taille; $i++){
-            if(strtoupper($table[$i]) == 'X') continue;
-            $horse = intval($table[$i]);
-            if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $table[$i]");
-            $champs []          = ['horse' => $horse, 'pos' => $i + 1];
-            $excludedHorse []   = $horse;
+            return [
+                'type'     => $taille,
+                'champs'   => $champs,
+                'ensemble' => $this->defineEnsemble($nbHorse, $excludedHorse)
+            ];
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
         }
-
-        return [
-            'type'     => $taille,
-            'champs'   => $champs,
-            'ensemble' => $this->defineEnsemble($nbHorse, $excludedHorse)
-        ];
-
     }
 
+    public function card(Array $jeu): int{
+        try{
+            $champs     = $jeu['champs'];
+            $ensemble   = $jeu['ensemble'];
+            $type       = $jeu['type'];
+            $k          = $type - count($champs);
+            return $this->cardinal(count($ensemble), $k);
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
 
 }
 
