@@ -296,8 +296,10 @@ class Arrangement{
 
         for($i = 0; $i < $taille; $i++){
             if(strtoupper($table[$i]) == 'X') continue;
-            $champs []          = ['horse' => $table[$i], 'pos' => $i + 1];
-            $excludedHorse []   = $table[$i];
+            $horse = intval($table[$i]);
+            if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $table[$i]");
+            $champs []          = ['horse' => $horse, 'pos' => $i + 1];
+            $excludedHorse []   = $horse;
         }
 
         return [
@@ -307,7 +309,7 @@ class Arrangement{
         ];
 
     }
-    
+
 
 }
 

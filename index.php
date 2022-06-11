@@ -5,7 +5,7 @@ try{
     
     $Arrangement    =   new Arrangement();
 
-    $jeu        =   "3-2-x-5-9";
+    $jeu        =   "4-x-5-16";
     $nbHorse    =   16;
     $jeu        =   $Arrangement->jeu($jeu, $nbHorse);
 
