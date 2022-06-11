@@ -13,7 +13,7 @@ try{
     $tickets    =   $Arrangement->tickets($jeu);
     $cardinal   =   $Arrangement->card($jeu);
 
-    error_log(print_r(["Jeu"        => $jeu], true));
+    // error_log(print_r(["Jeu"        => $jeu], true));
     // error_log(print_r(["Tickets"    => $tickets], true));
     error_log(print_r(["Cardinal"   => $cardinal], true));
 
