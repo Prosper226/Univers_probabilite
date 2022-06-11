@@ -1,0 +1,16 @@
+{
+    "name": "prosper/univers",
+    "description": "Denombrement-probabilite",
+    "autoload": {
+        "psr-4": {
+            "Univers\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Prosper226",
+            "email": "psedgo@gmail.com"
+        }
+    ],
+    "require": {}
+}

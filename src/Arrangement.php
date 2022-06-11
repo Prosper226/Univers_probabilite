@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * @author Prosper SEDGO
+ * @created_at 10/06/2022
+ * @last_update 11/06/2022
+ * @github https://github.com/Prosper226?tab=repositories
+ * @version 1.0.
+ */
+
+namespace Univers;
+use Exception;
+
 class Arrangement{
 
 
