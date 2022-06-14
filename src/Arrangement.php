@@ -4,7 +4,7 @@
  * @author BarkaLab
  * @developer Prosper SEDGO
  * @created_at 10/06/2022
- * @last_update 11/06/2022
+ * @last_update 14/06/2022
  * @github https://github.com/Prosper226?tab=repositories
  * @version 1.0.
  */
@@ -395,6 +395,8 @@ class Arrangement{
             $ensemble   = explode('-', explode('/', $jeu)[1]);
             $taille     = count($table);
 
+            $ensemble   = $this->intArray($ensemble);
+
             if($validation = $this->valideEnsemble($ensemble)) throw new Exception("Duplicates detected in the set: ".json_encode($validation));
             if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
 
@@ -425,6 +427,19 @@ class Arrangement{
             $unique     = array_unique($ensemble);
             $duplicates = array_diff_assoc($ensemble, $unique);
             return $duplicates;
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+
+    private function intArray($ensemble){
+        try{
+            $convert = [];
+            for($i = 0; $i < count($ensemble) ; $i++){
+                $convert[] = intval($ensemble[$i]);
+            }
+            return $convert;
         }catch(Exception $e){
             throw new Exception($e->getMessage());
         }

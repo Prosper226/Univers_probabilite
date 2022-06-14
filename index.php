@@ -7,16 +7,16 @@ try{
     
     $Arrangement    =   new Arrangement();
 
-    // /** CHAMP REDUIT */
-    // // $jeu        =   "1-6-x-x/4-5-8-9";
-    // // $nbHorse    =   16;
-    // // $jeu        =   $Arrangement->jeu($jeu, $nbHorse);
-    // // $tickets    =   $Arrangement->tickets($jeu);
-    // // $cardinal   =   $Arrangement->card($jeu);
+    /** CHAMP REDUIT */
+    $jeu        =   "1-6-x-x/4-5-8-9";
+    $nbHorse    =   16;
+    $jeu        =   $Arrangement->jeu($jeu, $nbHorse);
+    $tickets    =   $Arrangement->tickets($jeu);
+    $cardinal   =   $Arrangement->card($jeu);
 
-    // // error_log(print_r(["Jeu"        => $jeu], true));
-    // // error_log(print_r(["Tickets"    => $tickets], true));
-    // // error_log(print_r(["Cardinal"   => $cardinal], true));
+    error_log(print_r(["Jeu"        => $jeu], true));
+    // error_log(print_r(["Tickets"    => $tickets], true));
+    // error_log(print_r(["Cardinal"   => $cardinal], true));
 
 
     // /** CHAMP TOTAL */
