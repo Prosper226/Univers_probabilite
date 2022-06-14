@@ -325,16 +325,18 @@ class Arrangement{
         }
     }
 
-    public function jeu(String $jeu, int | null $nbHorse): Array{
+    public function jeu(String $jeu, int | null $nbHorse, int $is = null): Array{
         try{
 
-            $nature = $this->getTypeJeu($jeu);
+            $nature = (!$is) ? $this->getTypeJeu($jeu) : 3;
 
             switch ($nature){
                 case 1: 
                     return $this->champTotal($jeu, $nbHorse);
                 case 2: 
                     return $this->champReduit($jeu, $nbHorse);
+                case 3: 
+                    return $this->grandCarnet($jeu, $nbHorse, $is);
                 default: throw new Exception ("Unknown nature");
             }
 
@@ -357,7 +359,7 @@ class Arrangement{
 
     private function getTypeJeu($jeu){
         $table  = explode('/', $jeu);
-        return (!isset($table[1])) ? 1 : 2;  // champ total 1, champ reduit 2
+        return (!isset($table[1])) ? 1 :  2;  // champ total 1, champ reduit 2
     }
 
     private function champTotal(String $jeu, int $nbHorse){
@@ -414,6 +416,33 @@ class Arrangement{
             return [
                 'type'     => $taille,
                 'champs'   => $champs,
+                'ensemble' => $ensemble
+            ];
+
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    private function grandCarnet(String $jeu, int $nbHorse, int $p){
+        try{ 
+
+            $ensemble   = explode('-', $jeu);
+            $taille     = $p;
+
+            $ensemble   = $this->intArray($ensemble);
+
+            if($validation = $this->valideEnsemble($ensemble)) throw new Exception("Duplicates detected in the set: ".json_encode($validation));
+            if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
+
+            for($i = 0; $i < count($ensemble); $i++){
+                $horse = intval($ensemble[$i]);
+                if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $ensemble[$i]");
+            }
+
+            return [
+                'type'     => $taille,
+                'champs'   => [],
                 'ensemble' => $ensemble
             ];
 
