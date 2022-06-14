@@ -224,6 +224,9 @@ class Arrangement{
         return $univers;
     }
 
+
+
+    
     private function defineEnsemble(int $nbHorse, array $excludedHorse): Array {
         for($i = 1; $i <= $nbHorse; $i++){
             if(in_array($i,$excludedHorse)) continue;
@@ -231,8 +234,6 @@ class Arrangement{
         }
         return $ensemble;
     }
-
-
 
     public function tickets(Array $jeu): Array {
         try{
@@ -296,7 +297,7 @@ class Arrangement{
         }
     }
 
-    public function jeu(String $jeu, int $nbHorse): Array{
+    public function jeu_(String $jeu, int $nbHorse): Array{
         try{
             $table  = explode('-', $jeu);
             $taille = count($table);
@@ -324,6 +325,24 @@ class Arrangement{
         }
     }
 
+    public function jeu(String $jeu, int | null $nbHorse): Array{
+        try{
+
+            $nature = $this->getTypeJeu($jeu);
+
+            switch ($nature){
+                case 1: 
+                    return $this->champTotal($jeu, $nbHorse);
+                case 2: 
+                    return $this->champReduit($jeu, $nbHorse);
+                default: throw new Exception ("Unknown nature");
+            }
+
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
     public function card(Array $jeu): int{
         try{
             $champs     = $jeu['champs'];
@@ -331,6 +350,81 @@ class Arrangement{
             $type       = $jeu['type'];
             $k          = $type - count($champs);
             return $this->cardinal(count($ensemble), $k);
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    private function getTypeJeu($jeu){
+        $table  = explode('/', $jeu);
+        return (!isset($table[1])) ? 1 : 2;  // champ total 1, champ reduit 2
+    }
+
+    private function champTotal(String $jeu, int $nbHorse){
+        try{
+            $table  = explode('-', $jeu);
+            $taille = count($table);
+
+            if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
+
+            $champs   = [];
+            $excludedHorse = [];
+
+            for($i = 0; $i < $taille; $i++){
+                if(strtoupper($table[$i]) == 'X') continue;
+                $horse = intval($table[$i]);
+                if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $table[$i]");
+                $champs []          = ['horse' => $horse, 'pos' => $i + 1];
+                $excludedHorse []   = $horse;
+            }
+
+            return [
+                'type'     => $taille,
+                'champs'   => $champs,
+                'ensemble' => $this->defineEnsemble($nbHorse, $excludedHorse)
+            ];
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    private function champReduit(String $jeu, int $nbHorse){
+        try{ 
+
+            $table      = explode('-', explode('/', $jeu)[0]);
+            $ensemble   = explode('-', explode('/', $jeu)[1]);
+            $taille     = count($table);
+
+            if($validation = $this->valideEnsemble($ensemble)) throw new Exception("Duplicates detected in the set: ".json_encode($validation));
+            if(!in_array($taille, [3, 4, 5])) throw new Exception("Cannot resolve game");
+
+            $champs         = [];
+            $excludedHorse  = [];
+
+            for($i = 0; $i < $taille; $i++){
+                if(strtoupper($table[$i]) == 'X') continue;
+                $horse = intval($table[$i]);
+                if($horse < 1 || $horse > $nbHorse) throw new Exception("Invalid horse value: $table[$i]");
+                $champs []          = ['horse' => $horse, 'pos' => $i + 1];
+                $excludedHorse []   = $horse;
+            }
+
+            return [
+                'type'     => $taille,
+                'champs'   => $champs,
+                'ensemble' => $ensemble
+            ];
+
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    private function valideEnsemble($ensemble){
+        try{
+            $unique     = array_unique($ensemble);
+            $duplicates = array_diff_assoc($ensemble, $unique);
+            return $duplicates;
         }catch(Exception $e){
             throw new Exception($e->getMessage());
         }
